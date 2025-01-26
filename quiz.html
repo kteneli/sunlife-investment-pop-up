@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sun Life Quiz - You Got Hacked</title>
+    <style>
+        /* General Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            color: #ddff00;
+            overflow: hidden;
+        }
+
+        h1, h2, p, button {
+            text-shadow: 0 0 5px #d6cf4c, 0 0 10px #d6e52c;
+        }
+
+        h1 {
+            font-size: 3rem;
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            animation: flicker 2s infinite;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            animation: glitch 1.5s infinite;
+        }
+
+        p {
+            font-size: 1.2rem;
+            animation: glitch 1.5s infinite;
+        }
+
+        button {
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            background: #000000;
+            color: #4aa2d1;
+            border: 2px solid #45b2cb;
+            cursor: pointer;
+            animation: glitch 1s infinite;
+            margin: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background: #47a4c3;
+            color: #000000;
+            transform: scale(1.1);
+        }
+
+        .question {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .question.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #result {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #result.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .glitch {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.2;
+            animation: glitchyText 3s infinite;
+        }
+
+        .logo {
+            width: 150px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Animations */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, -2px); }
+            50% { transform: translate(2px, 2px); }
+            75% { transform: translate(-1px, 1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes glitchyText {
+            0%, 100% { top: 10%; left: 5%; }
+            25% { top: 15%; left: 10%; }
+            50% { top: 5%; left: 15%; }
+            75% { top: 12%; left: 2%; }
+        }
+    </style>
+</head>
+<body>
+    <h1>We've Got Your Back!</h1>
+    <img src="Sunlife Photos/Partner-Logo-Sunlife.png" alt="Sun Life Logo" class="logo">
+    <div id="quiz">
+        <!-- Question 1 -->
+        <div id="question1" class="question active">
+            <h2>What is your main financial goal?</h2>
+            <button onclick="selectAnswer('ETF')">Grow my investments</button>
+            <button onclick="selectAnswer('FHSA')">Save for a first home</button>
+            <button onclick="selectAnswer('TFSA')">Save for the future tax-free</button>
+        </div>
+
+        <!-- Question 2 -->
+        <div id="question2" class="question">
+            <h2>How long do you plan to keep this money invested?</h2>
+            <button onclick="selectAnswer('ETF')">10+ years</button>
+            <button onclick="selectAnswer('FHSA')">5–10 years</button>
+            <button onclick="selectAnswer('TFSA')">Less than 5 years</button>
+        </div>
+
+        <!-- Question 3 -->
+        <div id="question3" class="question">
+            <h2>How much risk are you comfortable with?</h2>
+            <button onclick="selectAnswer('ETF')">High risk, high reward</button>
+            <button onclick="selectAnswer('FHSA')">Moderate risk</button>
+            <button onclick="selectAnswer('TFSA')">Low risk</button>
+        </div>
+
+        <!-- Result -->
+        <div id="result" class="question">
+            <h2>Analyzing your answers...</h2>
+            <p>Redirecting you to the best investment option!</p>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const answers = {};
+
+        function selectAnswer(type) {
+            answers[`question${currentQuestion}`] = type;
+
+            const currentQuestionEl = document.getElementById(`question${currentQuestion}`);
+            currentQuestionEl.classList.remove('active');
+
+            currentQuestion++;
+            const nextQuestionEl = document.getElementById(`question${currentQuestion}`);
+            if (nextQuestionEl) {
+                nextQuestionEl.classList.add('active');
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('result').classList.add('active');
+
+            setTimeout(() => {
+                redirectToSunLife();
+            }, 3000);
+        }
+
+        function redirectToSunLife() {
+            const urls = {
+                ETF: 'https://www.sunlifeglobalinvestments.com/en/products/sun-life-tactical-etf-portfolios/',
+                FHSA: 'https://www.sunlife.ca/en/investments/fhsa/',
+                TFSA: 'https://www.sunlife.ca/en/investments/tfsa/'
+            };
+
+            const types = Object.values(answers);
+            const result = types.includes('FHSA') ? 'FHSA' : types.includes('ETF') ? 'ETF' : 'TFSA';
+
+            window.location.href = urls[result];
+        }
+    </script>
+</body>
+</html>
